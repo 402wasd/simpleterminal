@@ -1,0 +1,138 @@
+<html>
+<head>
+  <title>Terminal 0.0</title>
+
+
+
+  <style>
+
+  body
+    {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+    }
+#inp1
+{
+  background-color: black;
+  color: white;
+  border: 0px;
+  font-size: 12pt;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+#mainButton
+{
+  padding: 16px;
+  text-align: center;
+  background-color: black;
+  color: white;
+
+}
+.nodec
+{
+  text-decoration: none;
+
+}
+  </style>
+</head>
+
+
+<body>
+
+<div id="head">
+  Terminal 0.0 <br>
+  Last Modified 9:00 PM 12/3/2019<br><br>
+</div>
+
+
+
+<div id="out">
+
+  </div>
+
+<div id="input">
+
+  >> <input type="text" id="inp1" name="inp1" value="">
+  </input>
+
+  <br><br>
+
+
+  <button type="button" id="mainButton" onclick="checkInput(document.getElementById('inp1').value)">
+    Run </button>
+
+  </div>
+
+  <br><br><br><br><div id="view"> </div>
+
+</body>
+
+<script type="text/javascript">
+
+  function display(x)
+  {
+    document.getElementById('out').innerHTML += x;
+    var element = document.getElementById('view');
+    element.scrollIntoView();
+  }
+
+  function checkInput(i1)
+  {
+    display('>> '+i1+'<br>');
+    document.getElementById('out').innerHTML += '>> ';
+    if (i1=='date')
+    {
+      display(Date());
+    }
+    else if (i1=='help') {
+      display('Welcome to 0.0<br>* date<br>* help<br>* clear<br>* connect')
+    }
+    else if (i1=='clear') {
+        document.getElementById('out').innerHTML = '';
+    }
+    else if(i1 == 'connect')
+    {
+      display('Connection to remote mysql server "querytable" failed.');
+    }
+    else
+    {
+      if (i1=='')
+      {
+
+      }
+      else {
+        display('invalid input');
+      }
+    }
+
+    document.getElementById('out').innerHTML += '<br>';
+  }
+
+
+  var input = document.getElementById("inp1");
+
+  // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function(event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("mainButton").click();
+      document.getElementById("inp1").value = '';
+
+    }
+  });
+
+
+</script>
+
+
+</html>
