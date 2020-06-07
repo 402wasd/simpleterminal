@@ -7,7 +7,3 @@ Javacript UNIX like terminal interface for connecting to a remote database, push
     Javascript
     Ajax
     PHP
-
-Very rudimentary.
-
- 
