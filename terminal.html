@@ -1,9 +1,7 @@
 <html>
 <head>
+  <script src="jquery.js"></script>
   <title>Terminal 0.0</title>
-
-
-
   <style>
 
   body
@@ -16,6 +14,7 @@
 {
   background-color: black;
   color: white;
+  width: 90%;
   border: 0px;
   font-size: 12pt;
 }
@@ -40,6 +39,11 @@ button:focus {
   text-decoration: none;
 
 }
+
+#out
+{
+
+}
   </style>
 </head>
 
@@ -55,7 +59,7 @@ button:focus {
 
 <div id="out">
 
-  </div>
+</div>
 
 <div id="input">
 
@@ -76,6 +80,7 @@ button:focus {
 
 <script type="text/javascript">
 
+  /* This function concatenates with the content of #out html div element*/
   function display(x)
   {
     document.getElementById('out').innerHTML += x;
@@ -83,34 +88,106 @@ button:focus {
     element.scrollIntoView();
   }
 
+  function isin(iword, istring)
+  {
+    var i = 0;
+    var result = 1;
+    while (i<istring.length)
+    {
+      if (istring[i] == ' ')
+      {
+        break;
+      }
+      if (iword[i]!= istring[i])
+      {
+        result = 0;
+        break;
+      }
+      i += 1;
+    }
+    return result;
+  }
+  function checkWord(iword, istring)
+  {
+    var i;
+    var j = 0;
+    var temp = '';
+    for (i=0; i<istring.length; i++)
+    {
+      if (istring[i] == iword[j])
+      {
+        temp[j] = istring[i];
+        display(temp[j]);
+        j+=1;
+      }
+      else
+      {
+        j = 0;
+      }
+    }
+    if (temp == iword)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+  }
+
+  function pluck(iword, istring)
+  {
+
+  }
+
   function checkInput(i1)
   {
-    display('>> '+i1+'<br>');
+
+    if (i1!='')
+    {
+      //Displays the typed command for record
+      display('>> '+i1+'<br>');
+    }
     document.getElementById('out').innerHTML += '>> ';
+
     if (i1=='date')
     {
       display(Date());
     }
     else if (i1=='help') {
-      display('Welcome to 0.0<br>* date<br>* help<br>* clear<br>* connect')
+      display('Welcome to 0.0<br>* date<br>* help<br>* clear<br>* connect<br>* push<br>* notes')
     }
     else if (i1=='clear') {
         document.getElementById('out').innerHTML = '';
     }
     else if(i1 == 'connect')
     {
-      display('Connection to remote mysql server "querytable" failed.');
+      fetchdb();
+    }
+    else if (i1 == 'push')
+    {
+      pushdb(i1);
+      display('/connecting and pushing/')
+    }
+    /*else if (i1.indexOf('apple') != -1)
+    {
+      display('I rock');
+      display(pluck('apple', i1));
+    }*/
+    else if (isin('apple', i1))
+    {
+      display('I rock');
+      //display(pluck('apple', i1));
+    }
+    else if (i1=='')
+    {
+
     }
     else
     {
-      if (i1=='')
-      {
-
-      }
-      else {
         display('invalid input');
-      }
     }
+
 
     document.getElementById('out').innerHTML += '<br>';
   }
@@ -131,8 +208,33 @@ button:focus {
     }
   });
 
+  /* So this was the first time me using AJAX requests for making
+  dynamic stuff happen in a terminal. This is pretty neat. I liked it.
+  I was thinking about this problem in the early 2000s. Finally.
+  Back in the day, IE had some XML stuff going on.
+  */
+  //To Fetch the Table from DB
+  function fetchdb() { //Added the raw code instead of using dispay(x); because it wasn't working for some reason. I don't know why.
+    $.get("i2.php", function (data) { display(data); /*document.getElementById('out').innerHTML += data;
+    var element = document.getElementById('view');
+    element.scrollIntoView(); */})
+  }
+
+  function pushdb(x)
+  {
+    var i1 = x;
+    //Now separate the command 'push' from the data to be pushed.
+    $.post("insert.php", {
+      blurb: i1
+    }, function(data, status){
+        //$("#out").html(status);
+        //Have to do this because for some reason, status is returned
+        //as '<br>success' so I need to add this before and after it. To save my formatting.
+        display(">> "+status+"<br>");
+    })
+  }
+
+
 
 </script>
-
-
 </html>
